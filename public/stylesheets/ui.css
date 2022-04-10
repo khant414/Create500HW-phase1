@@ -1,0 +1,22 @@
+body{
+	background-color:#aab;
+}
+
+.grid{
+	display:grid;
+	grid-template-columns:auto auto auto auto auto;
+	grid-column-gap: 5%;
+	grid-row-gap: 5%;
+	margin: 20% 7% 7% 4%;
+}
+.grid div{
+	background-color:#ffffff;
+	border:solid #000000 2px;
+	text-align: center;
+}
+h1{
+    margin:5% 0 0 30%;
+}
+.btns{
+    height:30px;
+}
