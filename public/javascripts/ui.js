@@ -62,15 +62,16 @@ function Create(){
     console.log(`Store Id Length: ${storeIdValues.length}`)
     console.log(`Store Id : ${StoreIdVal}`);
     var minSalesPersonId = (idx * 4);
-    var SalesPersionIDRange = [minSalesPersonId + 1, minSalesPersonId + 2, minSalesPersonId + 3, minSalesPersonId + 4];
-
+    var SalesPersonIdRange = [minSalesPersonId + 1, minSalesPersonId + 2, minSalesPersonId + 3, minSalesPersonId + 4];
+    idx = Math.floor(Math.random() * SalesPersonIdRange.length)
+    var SalesPersonIdVal = SalesPersonIdRange[idx];
     idx = Math.floor(Math.random() * CdIDValues.length);
     var CdIdValue = CdIDValues[idx];
     //console.log(`CdId Value : ${CdIdValue}`)
     var AddToDate = Math.round(Math.random() * (30 - 5) + 5);
     //console.log(`AddToDate: ${AddToDate}`)
     valueArray.push(StoreIdVal);
-    valueArray.push(SalesPersionIDRange);
+    valueArray.push(SalesPersonIdVal);
     valueArray.push(CdIdValue);
     valueArray.push(pricePaidValue);
     valueArray.push(Date.now() + AddToDate);
