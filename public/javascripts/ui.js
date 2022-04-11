@@ -101,12 +101,15 @@ function SubmitOne() {
         .then(json => console.log(json),
         )
         .catch(err => console.log(err));
-    // $('#SalesPersonID').val( OrderObject.o.SalesPersonID);
-    // $('#CdID').val(OrderObject.o.CdID);
-    // $('#PricePaid').val(formatter.format(OrderObject.o.PricePaid));
-    // $('#Date').val(OrderObject.o.Date);
 }
 
 function Create500() {
     //Create500 code here
+    let i = 0;
+   while(i < 499)
+   {
+       i++
+       Create();
+       SubmitOne();
+   }
 }
