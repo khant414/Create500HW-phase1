@@ -35,7 +35,15 @@ $(document).ready(function(){
     })
 });
 
-
+//function to format USD
+var formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  
+    // These options are needed to round to whole numbers if that's what you want.
+    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+  });
 //To populate the OrderObject we have to assign the correct values to the OrderObject's given properties then stringify
 //it as a json object
 
@@ -64,11 +72,16 @@ function Create(){
     valueArray.push(Date.now() + AddToDate);
     var keys = ["StoreId", "SalesPersonId", "CdID", "PricePaid", "OrderDate"];
     OrderObject.o = new OrderObject(valueArray[0], valueArray[1], valueArray[2], valueArray[3], valueArray[4]);
+    
     for(var p in OrderObject.o) {
         console.log(OrderObject.o[p]);
     }
-
-
+    
+    $('#StoreID').val(OrderObject.o.StoreID);
+    $('#SalesPersonID').val( OrderObject.o.SalesPersonID);
+    $('#CdID').val(OrderObject.o.CdID);
+    $('#PricePaid').val(formatter.format(OrderObject.o.PricePaid));
+    $('#Date').val(OrderObject.o.Date);
 }
 
 function SubmitOne() {
