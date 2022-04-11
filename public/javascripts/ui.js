@@ -54,13 +54,17 @@ function Create(){
     var storeIdValues = [98053, 98007, 98077, 98055, 98011, 98046];
     var CdIDValues = [123456, 123654, 321456, 321654, 654123, 654321, 543216, 354126, 621453, 623451];
     var pricePaidValue = Math.round(Math.random() * (15 - 5) + 5);
-    idx = Math.round(Math.random() * storeIdValues.length);
+    
+    idx = Math.floor(Math.random() * storeIdValues.length);
+    
+    console.log(`IDX: ${idx}`);
     var StoreIdVal = storeIdValues[idx];
-    //console.log(`Store Id : ${StoreIdVal}`);
+    console.log(`Store Id Length: ${storeIdValues.length}`)
+    console.log(`Store Id : ${StoreIdVal}`);
     var minSalesPersonId = (idx * 4);
     var SalesPersionIDRange = [minSalesPersonId + 1, minSalesPersonId + 2, minSalesPersonId + 3, minSalesPersonId + 4];
 
-    idx = Math.round(Math.random() * CdIDValues.length);
+    idx = Math.floor(Math.random() * CdIDValues.length);
     var CdIdValue = CdIDValues[idx];
     //console.log(`CdId Value : ${CdIdValue}`)
     var AddToDate = Math.round(Math.random() * (30 - 5) + 5);
@@ -73,19 +77,34 @@ function Create(){
     var keys = ["StoreId", "SalesPersonId", "CdID", "PricePaid", "OrderDate"];
     OrderObject.o = new OrderObject(valueArray[0], valueArray[1], valueArray[2], valueArray[3], valueArray[4]);
     
-    for(var p in OrderObject.o) {
-        console.log(OrderObject.o[p]);
-    }
+    // for(var p in OrderObject.o) {
+    //     console.log(OrderObject.o[p]);
+    // }
     
     $('#StoreID').val(OrderObject.o.StoreID);
     $('#SalesPersonID').val( OrderObject.o.SalesPersonID);
     $('#CdID').val(OrderObject.o.CdID);
-    $('#PricePaid').val(formatter.format(OrderObject.o.PricePaid));
+    $('#PricePaid').val(OrderObject.o.PricePaid);
     $('#Date').val(OrderObject.o.Date);
 }
 
 function SubmitOne() {
+    let newOrder = new OrderObject(document.getElementById("StoreID").value,document.getElementById("SalesPersonID").value,document.getElementById("CdID").value,document.getElementById("PricePaid").value,document.getElementById("Date").value);
+
     //SubmitOne code here
+    fetch('/AddOrder', {
+        method: "POST",
+        body: JSON.stringify(newOrder),
+        headers: {"Content-type": "application/json; charset=UTF-8"}
+        })
+        .then(response => response.json()) 
+        .then(json => console.log(json),
+        )
+        .catch(err => console.log(err));
+    // $('#SalesPersonID').val( OrderObject.o.SalesPersonID);
+    // $('#CdID').val(OrderObject.o.CdID);
+    // $('#PricePaid').val(formatter.format(OrderObject.o.PricePaid));
+    // $('#Date').val(OrderObject.o.Date);
 }
 
 function Create500() {
