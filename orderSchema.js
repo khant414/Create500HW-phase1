@@ -16,11 +16,11 @@ const OrderSchema = new Schema({
         required:true
     },
     PricePaid: {
-        type: String,
+        type: Number,
         required:true
     },
     Date: {
-        type: String,
+        type: Date,
         required:true
     }
 });

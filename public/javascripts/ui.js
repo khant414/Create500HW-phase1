@@ -2,9 +2,15 @@
 
 //arrays holding the values that we will be using 
 var ids = ['StoreID', 'SalesPersonID', 'CdID', 'PricePaid', 'Date'];
-var buttons = ['CREATE', 'SUBMIT-ONE', 'SUBMIT500'];
-var funcs = ['Create', 'SubmitOne', 'Create500'];
+var buttons = ['CREATE', 'SUBMIT-ONE', 'SUBMIT500','query1', 'query2'];
+var funcs = ['Create', 'SubmitOne', 'Create500','query1','query2'];
 var order500 = [];
+
+function GetTimeString(){
+    let timeElapsed = Date.now();
+    let rightNow = new Date(timeElapsed);
+    return rightNow.toISOString();
+}
 
 //not used yet. We need to store the json object using this.
 function OrderObject(StoreID, SalesPersonID, CdID, PricePaid, Date) {
@@ -12,7 +18,7 @@ function OrderObject(StoreID, SalesPersonID, CdID, PricePaid, Date) {
     this.SalesPersonID = SalesPersonID || null;
     this.CdID = CdID || null;
     this.PricePaid = PricePaid || null;
-    this.Date = Date || null/*Date.now()*/;
+    this.Date = GetTimeString() || null; /*Date.now()*/
 }
 //Create the UI
 $(document).ready(function(){
@@ -69,6 +75,7 @@ function Create(){
 function SubmitOne() {
     var newOrder = new Create();
     $.post('http://localhost:3000/AddOrder', newOrder)
+    console.log(newOrder);
 }
 
 function Create500() {
@@ -76,7 +83,11 @@ function Create500() {
         SubmitOne();
     }
 }
-
+function query1() {
+    
+    console.log($.get('http://localhost:3000/getTopSalesperson'));
+    
+}
 
 
 
