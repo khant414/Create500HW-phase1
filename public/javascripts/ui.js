@@ -2,8 +2,15 @@
 
 //arrays holding the values that we will be using 
 var ids = ['StoreID', 'SalesPersonID', 'CdID', 'PricePaid', 'Date'];
-var buttons = ['CREATE', 'SUBMIT-ONE', 'SUBMIT500'];
-var funcs = ['Create', 'SubmitOne', 'Create500'];
+var buttons = ['CREATE', 'SUBMIT-ONE', 'SUBMIT500','query1', 'query2'];
+var funcs = ['Create', 'SubmitOne', 'Create500','query1','query2'];
+var order500 = [];
+
+function GetTimeString(){
+    let timeElapsed = Date.now();
+    let rightNow = new Date(timeElapsed);
+    return rightNow.toISOString();
+}
 
 //not used yet. We need to store the json object using this.
 function OrderObject(StoreID, SalesPersonID, CdID, PricePaid, Date) {
@@ -11,7 +18,7 @@ function OrderObject(StoreID, SalesPersonID, CdID, PricePaid, Date) {
     this.SalesPersonID = SalesPersonID || null;
     this.CdID = CdID || null;
     this.PricePaid = PricePaid || null;
-    this.Date = Date || null/*Date.now()*/;
+    this.Date = GetTimeString() || null; /*Date.now()*/
 }
 //Create the UI
 $(document).ready(function(){
@@ -25,28 +32,16 @@ $(document).ready(function(){
         $('.grid').after(`<input type = "button" id = "${buttons[p]}" class = "btns" 
         onclick = ${funcs[buttons.indexOf(buttons[p])]}() value = ${buttons[buttons.indexOf(buttons[p])]}>`);
     }
-    //for the buttons styles.. not supposed to style elements from js but this is a small assignment.
+    
     $('.btns').css({        
         'width': '20%',
         'borderRadius': '25%',
         'marginLeft': '7%',
+        'marginTop': '2%',
         'backgroundColor': 'teal',
         'color':'#ffffff'
     })
 });
-
-//function to format USD
-var formatter = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  
-    // These options are needed to round to whole numbers if that's what you want.
-    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
-    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
-  });
-//To populate the OrderObject we have to assign the correct values to the OrderObject's given properties then stringify
-//it as a json object
-
 
 function Create(){
     var valueArray = [];
@@ -54,63 +49,68 @@ function Create(){
     var storeIdValues = [98053, 98007, 98077, 98055, 98011, 98046];
     var CdIDValues = [123456, 123654, 321456, 321654, 654123, 654321, 543216, 354126, 621453, 623451];
     var pricePaidValue = Math.round(Math.random() * (15 - 5) + 5);
-    
     idx = Math.floor(Math.random() * storeIdValues.length);
-    
-    console.log(`IDX: ${idx}`);
     var StoreIdVal = storeIdValues[idx];
-    console.log(`Store Id Length: ${storeIdValues.length}`)
-    console.log(`Store Id : ${StoreIdVal}`);
     var minSalesPersonId = (idx * 4);
     var SalesPersonIdRange = [minSalesPersonId + 1, minSalesPersonId + 2, minSalesPersonId + 3, minSalesPersonId + 4];
     idx = Math.floor(Math.random() * SalesPersonIdRange.length)
     var SalesPersonIdVal = SalesPersonIdRange[idx];
     idx = Math.floor(Math.random() * CdIDValues.length);
     var CdIdValue = CdIDValues[idx];
-    //console.log(`CdId Value : ${CdIdValue}`)
-    var AddToDate = Math.round(Math.random() * (30 - 5) + 5);
-    //console.log(`AddToDate: ${AddToDate}`)
-    valueArray.push(StoreIdVal);
-    valueArray.push(SalesPersonIdVal);
-    valueArray.push(CdIdValue);
-    valueArray.push(pricePaidValue);
-    valueArray.push(Date.now() + AddToDate);
+    var AddToDate = Math.round(Math.random() * (3000 - 500) + 500);
+    var values = [StoreIdVal, SalesPersonIdVal, CdIdValue, pricePaidValue, Date.now() + AddToDate];
+    for(var p in values) {
+        valueArray.push(values[p]);
+    }
     var keys = ["StoreId", "SalesPersonId", "CdID", "PricePaid", "OrderDate"];
     OrderObject.o = new OrderObject(valueArray[0], valueArray[1], valueArray[2], valueArray[3], valueArray[4]);
-    
-    // for(var p in OrderObject.o) {
-    //     console.log(OrderObject.o[p]);
-    // }
-    
-    $('#StoreID').val(OrderObject.o.StoreID);
-    $('#SalesPersonID').val( OrderObject.o.SalesPersonID);
-    $('#CdID').val(OrderObject.o.CdID);
-    $('#PricePaid').val(OrderObject.o.PricePaid);
-    $('#Date').val(OrderObject.o.Date);
+    var elems = [$('#StoreID'), $('#SalesPersonID'), $('#CdID'), $('#PricePaid'), $('#Date')];
+    var props = ['StoreID', 'SalesPersonID', 'CdID', 'PricePaid', 'Date'];
+    for(var i = 0; i < elems.length;i++) {
+        elems[i].val(OrderObject.o[[props[i]]]);
+    }
+    return OrderObject.o;
 }
 
 function SubmitOne() {
-    let newOrder = new OrderObject(document.getElementById("StoreID").value,document.getElementById("SalesPersonID").value,document.getElementById("CdID").value,document.getElementById("PricePaid").value,document.getElementById("Date").value);
-
-    //SubmitOne code here
-    fetch('/AddOrder', {
-        method: "POST",
-        body: JSON.stringify(newOrder),
-        headers: {"Content-type": "application/json; charset=UTF-8"}
-        })
-        .then(response => response.json()) 
-        .then(json => console.log(json),
-        )
-        .catch(err => console.log(err));
+    var newOrder = new Create();
+    $.post('http://localhost:3000/AddOrder', newOrder)
+    console.log(newOrder);
 }
 
 function Create500() {
-    //Create500 code here
-    let i = 0;
+    for(var i = 0;i < 501;i++) {
+        SubmitOne();
+    }
+}
+function query1() {
+    
+    console.log($.get('http://localhost:3000/getTopSalesperson'));
+    
+}
+
+
+
+
+
+
+
+/*function Create500() {
+    var order = JSON.stringify(Create());
+
+    $.post('http://localhost:3000/Add500', order)
+    .done(function() {
+        //console.log(`${strungOutData} posted`);        
+    })
+        
+*/
+   /* let i = 0;
    while(i < 499)
    {
        i++
        Create();
        SubmitOne();
    }
-}
+   */
+//}
+
