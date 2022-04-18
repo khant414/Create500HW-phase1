@@ -110,29 +110,39 @@ function query1() {
         }, "json");
 }
 
-  
+function query2() {
+    
+    $('.grid').before("<div id = 'results'><ul></ul></div>");
+    $('#results').css({
+        'position':'absolute',
+        'top':'18%',
+        'left': '4%',
+    });
+    setTimeout(randomlySelectWinner, 1500); 
 
+    $.get('http://localhost:3000/promo1')
+    .done(function(data){
+        $('#results ul').append(`<li>Sales Group 1 Winner: ${data[0]._id} : ${data[0].totalSales}</li>`)
+    });
+    $.get('http://localhost:3000/promo2')
+    .done(function(data){
+        $('#results ul').append(`<li>Sales Group 2 Winner: ${data[0]._id} : ${data[0].totalSales}</li>`)
+    });
+    $.get('http://localhost:3000/promo3')
+    .done(function(data){
+        $('#results ul').append(`<li>Sales Group 3 Winner: ${data[0]._id} : ${data[0].totalSales}</li>`)
+    });
+    $.get('http://localhost:3000/promo4')
+    .done(function(data){        
+        $('#results ul').append(`<li>Sales Group 4 Winner: ${data[0]._id} : ${data[0].totalSales}</li>`)
+    });
+    $.get('http://localhost:3000/promo5')
+    .done(function(data){
+        $('#results ul').append(`<li>Sales Group 5 Winner: ${data[0]._id} : ${data[0].totalSales}</li>`)
+    });
+}
 
-
-
-
-
-/*function Create500() {
-    var order = JSON.stringify(Create());
-
-    $.post('http://localhost:3000/Add500', order)
-    .done(function() {
-        //console.log(`${strungOutData} posted`);        
-    })
-        
-*/
-   /* let i = 0;
-   while(i < 499)
-   {
-       i++
-       Create();
-       SubmitOne();
-   }
-   */
-//}
-
+function randomlySelectWinner(){
+    var r = Math.round(Math.random() * 5)
+    $('#results ul li').eq(r).css('color', 'red')
+}

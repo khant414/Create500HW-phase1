@@ -14,9 +14,6 @@ mongoose.connect(dbURI).then(
   }
 )
 
-
-
-
 router.post('/AddOrder', function(req, res) {
   let oneOrder = new OrderSchema(req.body);  
   console.log(req.body);
@@ -59,6 +56,100 @@ router.get('/getTopSalesperson', function(req, res) {
 
   });
 });
+
+
+
+router.get('/promo1', function(req, res) {
+  var groups = [];
+  var g1 = 
+  OrderSchema.aggregate( [
+    { $match: { $and: [ { SalesPersonID: { $gt: 0, $lt: 5 } } ] } },
+    { $group: {_id : "$SalesPersonID", totalSales : { $sum : { $toInt : "$PricePaid" } }}}
+  ] );
+  var sortedG1 = g1.sort('-totalSales').limit(1);
+  sortedG1.exec(function(err,data){
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(data);
+    res.status(200).send(data);
+  });
+});
+
+router.get('/promo2', function(req, res) {  
+  var g2 = 
+  OrderSchema.aggregate( [
+    { $match: { $and: [ { SalesPersonID: { $gt: 4, $lt: 9 } } ] } },
+    { $group: {_id : "$SalesPersonID", totalSales : { $sum : { $toInt : "$PricePaid" } }}}
+  ] );
+  var sortedG2 = g2.sort('-totalSales').limit(1);
+  sortedG2.exec(function(err,data){
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(data);
+    res.status(200).send(data);    
+  });
+});
+
+router.get('/promo3', function(req, res) {
+  var g3 = 
+  OrderSchema.aggregate( [
+    { $match: { $and: [ { SalesPersonID: { $gt: 8, $lt: 13 } } ] } },
+    { $group: {_id : "$SalesPersonID", totalSales : { $sum : { $toInt : "$PricePaid" } }}}
+  ] );
+  var sortedG3 = g3.sort('-totalSales').limit(1);
+  sortedG3.exec(function(err,data){
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(data);
+    res.status(200).send(data);    
+  });
+});
+
+router.get('/promo4', function(req, res) {
+  var g4 = 
+  OrderSchema.aggregate( [
+    { $match: { $and: [ { SalesPersonID: { $gt: 12, $lt: 17 } } ] } },
+    { $group: {_id : "$SalesPersonID", totalSales : { $sum : { $toInt : "$PricePaid" } }}}
+  ] );
+  var sortedG4 = g4.sort('-totalSales').limit(1);
+  sortedG4.exec(function(err,data){
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    console.log(data);
+    res.status(200).send(data);   
+  });
+});
+
+router.get('/promo5', function(req, res) {
+    var g5 = 
+    OrderSchema.aggregate( [
+      { $match: { $and: [ { SalesPersonID: { $gt: 16, $lt: 21 } } ] } },
+      { $group: {_id : "$SalesPersonID", totalSales : { $sum : { $toInt : "$PricePaid" } }}}
+    ] );
+    var sortedG5 = g5.sort('-totalSales').limit(1);
+    sortedG5.exec(function(err,data){
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      }
+      console.log(data);
+      res.status(200).send(data);   
+  });
+});
+
+
+
+
+
+
 
 const port = process.env.PORT || 3000;
 
