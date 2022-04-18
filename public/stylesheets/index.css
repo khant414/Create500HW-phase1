@@ -21,3 +21,11 @@ li {
   font-weight:    bold;
 }
 
+table, th, td {
+      border: 1px solid black;
+      borderCollapse: collapse;
+      color:black;
+      backgroundColor: teal;
+      padding: 5px;
+      textAlign: center;
+  }

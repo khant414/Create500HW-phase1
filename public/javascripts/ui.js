@@ -6,6 +6,16 @@ var buttons = ['CREATE', 'SUBMIT-ONE', 'SUBMIT500','query1', 'query2'];
 var funcs = ['Create', 'SubmitOne', 'Create500','query1','query2'];
 var order500 = [];
 
+//Format Currency
+const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  
+    // These options are needed to round to whole numbers if that's what you want.
+    //minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+    //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+  });
+//Format Time Strings
 function GetTimeString(){
     let timeElapsed = Date.now();
     let rightNow = new Date(timeElapsed);
@@ -41,6 +51,7 @@ $(document).ready(function(){
         'backgroundColor': 'teal',
         'color':'#ffffff'
     })
+   
 });
 
 function Create(){
@@ -84,11 +95,22 @@ function Create500() {
     }
 }
 function query1() {
-    
-    console.log($.get('http://localhost:3000/getTopSalesperson'));
-    
+        $('#topSalesResultsTable').remove();
+        $('#topSalesBanner').remove();
+        $.get( 'http://localhost:3000/getTopSalesperson', function( data ) {
+            $('.grid').append('<h1 id="topSalesBanner"> Top 3 Sales Persons</h1>')
+                var content = "<table id='topSalesResultsTable'>";
+                content += "<th>SalesPersonID</th>";
+                content += "<th>Total</th>";
+                for(i=0; i<3; i++){
+                    content += '<tr><td>' + data[i]._id + '</td><td>' + formatter.format(data[i].total) + '</td></tr>';
+                }
+                content += "</table>";
+            $('.grid').append(content);   
+        }, "json");
 }
 
+  
 
 
 
